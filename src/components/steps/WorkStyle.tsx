@@ -1,4 +1,5 @@
 import { StepProps } from '../../types'
+import StepIndicator from '../StepIndicator'
 
 export default function WorkStyle({ 
   formData, 
@@ -6,7 +7,9 @@ export default function WorkStyle({
   onNext, 
   onPrev, 
   isFirst,
-  isLast 
+  isLast,
+  steps,
+  currentStep
 }: StepProps) {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
@@ -17,6 +20,17 @@ export default function WorkStyle({
 
   return (
     <form onSubmit={handleSubmit}>
+      {/* Step Indicator */}
+      {steps && currentStep && (
+        <div className="stepper-container mb-6">
+          <StepIndicator 
+            steps={steps} 
+            currentStep={currentStep} 
+          />
+          <p className="step-indicator-text">Step {currentStep} of {steps.length}</p>
+        </div>
+      )}
+
       {/* Work Style */}
       <div className="form-group">
         <label htmlFor="workStyle" className="form-label">

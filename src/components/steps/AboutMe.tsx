@@ -1,4 +1,5 @@
 import { StepProps } from '../../types'
+import StepIndicator from '../StepIndicator'
 
 export default function AboutMe({ 
   formData, 
@@ -6,7 +7,9 @@ export default function AboutMe({
   onNext, 
   onPrev, 
   isFirst,
-  isLast 
+  isLast,
+  steps,
+  currentStep
 }: StepProps) {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
@@ -17,6 +20,17 @@ export default function AboutMe({
 
   return (
     <form onSubmit={handleSubmit}>
+      {/* Step Indicator */}
+      {steps && currentStep && (
+        <div className="stepper-container mb-6">
+          <StepIndicator 
+            steps={steps} 
+            currentStep={currentStep} 
+          />
+          <p className="step-indicator-text">Step {currentStep} of {steps.length}</p>
+        </div>
+      )}
+
       {/* About Me */}
       <div className="form-group">
         <label htmlFor="aboutMe" className="form-label">

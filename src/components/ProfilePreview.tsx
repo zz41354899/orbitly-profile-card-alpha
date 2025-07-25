@@ -1,5 +1,6 @@
 import { FormData } from '../types'
 import { User, MapPin } from 'lucide-react'
+import { getDisplayAvatar } from '../utils/avatarUtils'
 
 interface ProfilePreviewProps {
   formData: FormData
@@ -19,19 +20,34 @@ export default function ProfilePreview({ formData }: ProfilePreviewProps) {
     profilePhoto
   } = formData
 
+  // Debug: 檢查formData的值
+  console.log('ProfilePreview - formData:', {
+    gender: formData.gender,
+    profilePhoto: profilePhoto ? 'has photo' : 'no photo',
+    avatarPath: getDisplayAvatar(profilePhoto, formData.gender)
+  })
+
   return (
     <div className="profile-card">
       {/* Profile Photo */}
       <div className="profile-avatar">
-        {profilePhoto ? (
+        {formData.gender ? (
           <img
-            src={profilePhoto}
+            src={getDisplayAvatar(profilePhoto, formData.gender)}
             alt="Profile"
             className="w-20 h-20 rounded-full object-cover"
+            onError={(e) => {
+              // 如果圖片加載失敗，顯示預設圖標
+              console.error('圖片載入失敗:', getDisplayAvatar(profilePhoto, formData.gender));
+              const target = e.target as HTMLImageElement;
+              target.style.display = 'none';
+              target.nextElementSibling?.classList.remove('hidden');
+            }}
           />
         ) : (
           <User className="w-8 h-8 text-gray-400" />
         )}
+        <User className="w-8 h-8 text-gray-400 hidden" />
       </div>
 
       {/* Name and Title */}

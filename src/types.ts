@@ -1,3 +1,9 @@
+export type Step = {
+  id: number;
+  title: string;
+  component: any;
+};
+
 export interface FormData {
   // Step 1: Basic Information
   fullName: string;
@@ -30,10 +36,4 @@ export interface StepProps {
   isLast: boolean;
   steps?: Step[];
   currentStep?: number;
-}
-
-export type Step = {
-  id: number;
-  title: string;
-  component: any;
-}; 
+} 

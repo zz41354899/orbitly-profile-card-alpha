@@ -106,11 +106,13 @@
   
   .stepper-container {
     @apply flex items-center gap-4;
+    height: 40px; /* 固定高度，防止切換時移動 */
   }
   
   /* Step Indicator - Exact Figma Design */
   .step-indicator {
     @apply flex items-center justify-center;
+    min-width: 220px; /* 固定最小寬度，防止切換時移動 */
   }
   
   .step-group {
@@ -119,6 +121,7 @@
   
   .step-circle {
     @apply w-8 h-8 rounded-full flex items-center justify-center text-sm font-medium transition-colors;
+    flex-shrink: 0; /* 防止縮小 */
   }
   
   .step-circle.active {
@@ -131,10 +134,13 @@
   
   .step-connector {
     @apply h-px bg-gray-300 w-8 mx-2;
+    flex-shrink: 0; /* 防止縮小 */
   }
   
   .step-indicator-text {
     @apply text-sm text-gray-600 dark:text-gray-400 whitespace-nowrap;
+    min-width: 80px; /* 固定最小寬度，防止文字變化時移動 */
+    text-align: center; /* 文字居中 */
   }
   
   /* Dark Mode Toggle */
@@ -332,12 +338,21 @@
     .step-connector {
       @apply w-6 mx-1;
     }
+    
+    .step-indicator {
+      min-width: 180px; /* 平板上的最小寬度 */
+    }
   }
 
   /* Mobile Responsive */
   @media (max-width: 768px) {
     .orbitly-main {
       @apply grid-cols-1;
+    }
+    
+    /* 隱藏手機版預覽面板 */
+    .preview-panel {
+      @apply hidden;
     }
     
     .orbitly-header {
@@ -350,14 +365,24 @@
     
     .stepper-container {
       @apply gap-2;
+      height: 36px; /* 手機版固定高度 */
     }
     
     .step-connector {
       @apply w-4 mx-1;
     }
     
+    .step-indicator {
+      min-width: 160px; /* 手機上的最小寬度 */
+    }
+    
     .form-panel, .preview-panel {
       @apply p-6;
+    }
+    
+    /* 手機版按鈕垂直排列 */
+    .form-navigation {
+      @apply flex-col space-y-4 items-stretch pt-8;
     }
     
     .footer-content {
@@ -384,6 +409,14 @@
     
     .step-circle {
       @apply w-6 h-6 text-xs;
+    }
+    
+    .step-indicator {
+      min-width: 140px; /* 小手機上的最小寬度 */
+    }
+    
+    .stepper-container {
+      height: 32px; /* 小手機版固定高度 */
     }
     
     .dark-mode-toggle {

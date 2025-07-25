@@ -1,6 +1,7 @@
 import { jsPDF } from 'jspdf'
 import html2canvas from 'html2canvas'
 import { FormData } from '../types'
+import { getDisplayAvatar } from './avatarUtils'
 
 // 創建 PDF 模板 HTML
 const createPDFTemplate = (formData: FormData, language: 'en' | 'zh') => {
@@ -46,7 +47,7 @@ const createPDFTemplate = (formData: FormData, language: 'en' | 'zh') => {
           font-size: 48px;
           color: #9ca3af;
         ">
-          ${formData.profilePhoto ? `<img src="${formData.profilePhoto}" style="width: 120px; height: 120px; border-radius: 50%; object-fit: cover;" />` : '👤'}
+          ${formData.profilePhoto || formData.gender ? `<img src="${getDisplayAvatar(formData.profilePhoto, formData.gender)}" style="width: 120px; height: 120px; border-radius: 50%; object-fit: cover;" />` : '👤'}
         </div>
       </div>
 
@@ -266,6 +267,8 @@ export const generateProfilePDF = async (formData: FormData, language: 'en' | 'z
     throw new Error('PDF generation failed')
   }
 }
+
+
 
 // 從 HTML 元素生成 PDF（備用方法）
 export const generatePDFFromElement = async (elementId: string, fileName: string) => {

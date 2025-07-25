@@ -1,6 +1,8 @@
-import { useRef, useState } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { StepProps } from '../../types'
-import { Camera, Upload, Download, CheckCircle } from 'lucide-react'
+import { Camera, Upload, Trash2, Download, CheckCircle } from 'lucide-react'
+import StepIndicator from '../StepIndicator'
+import { getDisplayAvatar } from '../../utils/avatarUtils'
 import { generateProfilePDF } from '../../utils/pdfExport'
 import {
   Dialog,
@@ -14,23 +16,27 @@ export default function PhotoReview({
   formData, 
   updateFormData, 
   onPrev, 
-  isFirst
+  isFirst,
+  steps,
+  currentStep
 }: StepProps) {
-  const fileInputRef = useRef<HTMLInputElement>(null)
   const [showCompletionDialog, setShowCompletionDialog] = useState(false)
+  const fileInputRef = useRef<HTMLInputElement>(null)
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault()
-    // Final submission logic here
-    setShowCompletionDialog(true)
-  }
+  useEffect(() => {
+    // 移除未使用的 previewUrl 狀態和相關設置
+    if (formData.profilePhoto) {
+      // 保留 useEffect 以備將來可能需要
+    }
+  }, [formData.profilePhoto])
 
-  const handlePhotoUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0]
     if (file) {
       const reader = new FileReader()
-      reader.onload = (event) => {
-        updateFormData({ profilePhoto: event.target?.result as string })
+      reader.onloadend = () => {
+        const result = reader.result as string
+        updateFormData({ profilePhoto: result })
       }
       reader.readAsDataURL(file)
     }
@@ -53,77 +59,135 @@ export default function PhotoReview({
     }
   }
 
-  return (
-    <form onSubmit={handleSubmit} className="space-y-6">
-      <p className="text-gray-600 dark:text-gray-400 mb-6">
-        Add your profile photo and review your information
-      </p>
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault()
+    // Final submission logic here
+    setShowCompletionDialog(true)
+  }
 
-      {/* Photo Upload */}
-      <div>
-        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-4">
-          Profile Photo
-        </label>
-        
-        <div className="flex flex-col items-center space-y-4">
-          {/* Photo Preview */}
-          <div className="w-32 h-32 bg-gray-100 dark:bg-gray-700 rounded-full flex items-center justify-center overflow-hidden">
-            {formData.profilePhoto ? (
-              <img
-                src={formData.profilePhoto}
-                alt="Profile preview"
-                className="w-full h-full object-cover"
-              />
-            ) : (
-              <Camera className="w-12 h-12 text-gray-400" />
-            )}
-          </div>
-          
-          {/* Upload Button */}
-          <button
-            type="button"
-            onClick={triggerFileInput}
-            className="inline-flex items-center px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm text-sm font-medium text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500 transition-colors"
-          >
-            <Upload className="w-4 h-4 mr-2" />
-            {formData.profilePhoto ? 'Change Photo' : 'Upload Photo'}
-          </button>
-          
-          <input
-            ref={fileInputRef}
-            type="file"
-            accept="image/*"
-            onChange={handlePhotoUpload}
-            className="hidden"
+  return (
+    <form onSubmit={handleSubmit}>
+      {/* Step Indicator */}
+      {steps && currentStep && (
+        <div className="stepper-container mb-6">
+          <StepIndicator 
+            steps={steps} 
+            currentStep={currentStep} 
           />
+          <p className="step-indicator-text">Step {currentStep} of {steps.length}</p>
         </div>
+      )}
+
+      <div className="form-group">
+        <h2 className="form-title">Review Your Profile</h2>
+        <p className="form-subtitle">Upload a professional photo and review your profile</p>
       </div>
 
-      {/* Profile Summary */}
-      <div className="bg-gray-50 dark:bg-gray-800 p-6 rounded-lg">
-        <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4">Profile Summary</h3>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
-          <div>
-            <span className="font-medium text-gray-700 dark:text-gray-300">Name:</span>
-            <span className="ml-2 text-gray-600 dark:text-gray-400">{formData.fullName || 'Not specified'}</span>
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+        {/* Photo Upload */}
+        <div className="form-group">
+          <label className="form-label">Profile Photo</label>
+          <div className="mt-2 flex flex-col items-center justify-center">
+            {/* Photo Preview */}
+            <div className="w-40 h-40 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden mb-4 flex items-center justify-center">
+              {formData.gender ? (
+                <img 
+                  src={getDisplayAvatar(formData.profilePhoto, formData.gender)} 
+                  alt="Profile Preview" 
+                  className="w-full h-full object-cover"
+                  onError={(e) => {
+                    console.error("圖片載入失敗", e);
+                    const imgElement = e.target as HTMLImageElement;
+                    if (imgElement && imgElement.style) {
+                      imgElement.style.display = 'none';
+                      const nextElement = imgElement.nextElementSibling as HTMLElement;
+                      if (nextElement && nextElement.style) {
+                        nextElement.style.display = 'flex';
+                      }
+                    }
+                  }}
+                />
+              ) : (
+                <Camera className="w-12 h-12 text-gray-400" />
+              )}
+              <Camera className="w-12 h-12 text-gray-400 hidden" />
+            </div>
+
+            {/* Upload Button */}
+            <div className="flex flex-col gap-2 w-full">
+              <button
+                type="button"
+                onClick={triggerFileInput}
+                className="btn-secondary flex items-center justify-center"
+              >
+                <Upload className="w-4 h-4 mr-2" />
+                {formData.profilePhoto ? 'Change Photo' : 'Upload Photo'}
+              </button>
+              
+              <input
+                ref={fileInputRef}
+                type="file"
+                accept="image/*"
+                onChange={handleFileChange}
+                className="hidden"
+              />
+              
+              {/* Remove Photo Button */}
+              {formData.profilePhoto && (
+                <button
+                  type="button"
+                  onClick={() => updateFormData({ profilePhoto: null })}
+                  className="btn-secondary bg-red-50 hover:bg-red-100 text-red-600 hover:text-red-700 border-red-200 hover:border-red-300 dark:bg-red-900/20 dark:hover:bg-red-900/30 dark:text-red-400 dark:hover:text-red-300 dark:border-red-800 dark:hover:border-red-700 flex items-center justify-center"
+                >
+                  <Trash2 className="w-4 h-4 mr-2" />
+                  Remove Photo
+                </button>
+              )}
+            </div>
           </div>
-          <div>
-            <span className="font-medium text-gray-700 dark:text-gray-300">Title:</span>
-            <span className="ml-2 text-gray-600 dark:text-gray-400">{formData.professionalTitle || 'Not specified'}</span>
-          </div>
-          <div>
-            <span className="font-medium text-gray-700 dark:text-gray-300">Location:</span>
-            <span className="ml-2 text-gray-600 dark:text-gray-400">{formData.location || 'Not specified'}</span>
-          </div>
-          <div>
-            <span className="font-medium text-gray-700 dark:text-gray-300">Work Style:</span>
-            <span className="ml-2 text-gray-600 dark:text-gray-400">{formData.workStyle || 'Not specified'}</span>
-          </div>
-          <div className="md:col-span-2">
-            <span className="font-medium text-gray-700 dark:text-gray-300">Skills:</span>
-            <span className="ml-2 text-gray-600 dark:text-gray-400">
-              {formData.skills.length > 0 ? formData.skills.join(', ') : 'Not specified'}
-            </span>
+        </div>
+
+        {/* Profile Summary */}
+        <div className="form-group">
+          <label className="form-label">Profile Summary</label>
+          <div className="mt-2 p-4 bg-gray-50 dark:bg-gray-700 rounded-lg border border-gray-200 dark:border-gray-600">
+            <h3 className="font-medium text-gray-900 dark:text-gray-300 mb-1">{formData.fullName || 'Your Name'}</h3>
+            <p className="text-gray-600 dark:text-gray-400 text-sm mb-2">{formData.professionalTitle || 'Professional Title'}</p>
+            
+            {formData.location && (
+              <p className="text-gray-600 dark:text-gray-400 text-sm mb-3">📍 {formData.location}</p>
+            )}
+            
+            {formData.aboutMe && (
+              <div className="mb-3">
+                <h4 className="text-sm font-medium text-gray-900 dark:text-gray-300 mb-1">About Me</h4>
+                <p className="text-gray-600 dark:text-gray-400 text-sm">{formData.aboutMe.substring(0, 100)}{formData.aboutMe.length > 100 ? '...' : ''}</p>
+              </div>
+            )}
+            
+            {formData.skills && formData.skills.length > 0 && (
+              <div className="mb-3">
+                <h4 className="text-sm font-medium text-gray-900 dark:text-gray-300 mb-1">Skills</h4>
+                <div className="flex flex-wrap gap-1">
+                  {formData.skills.slice(0, 5).map((skill, index) => (
+                    <span key={index} className="text-xs bg-blue-100 text-blue-800 px-2 py-0.5 rounded-full">{skill}</span>
+                  ))}
+                  {formData.skills.length > 5 && <span className="text-xs text-gray-500">+{formData.skills.length - 5} more</span>}
+                </div>
+              </div>
+            )}
+            
+            {formData.specialties && formData.specialties.length > 0 && (
+              <div>
+                <h4 className="text-sm font-medium text-gray-900 dark:text-gray-300 mb-1">Specialties</h4>
+                <div className="flex flex-wrap gap-1">
+                  {formData.specialties.slice(0, 3).map((specialty, index) => (
+                    <span key={index} className="text-xs bg-green-100 text-green-800 px-2 py-0.5 rounded-full">{specialty}</span>
+                  ))}
+                  {formData.specialties.length > 3 && <span className="text-xs text-gray-500">+{formData.specialties.length - 3} more</span>}
+                </div>
+              </div>
+            )}
           </div>
         </div>
       </div>
@@ -138,27 +202,25 @@ export default function PhotoReview({
         </div>
       </div>
 
-
-
       {/* Navigation Buttons */}
-      <div className="flex justify-between pt-6">
-        {!isFirst && (
+      <div className="form-navigation md:flex-row flex-col space-y-4 md:space-y-0">
+        {!isFirst ? (
           <button
             type="button"
             onClick={onPrev}
-            className="px-6 py-3 border border-gray-300 dark:border-gray-600 rounded-md text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 dark:focus:ring-gray-400 transition-colors"
+            className="btn-secondary w-full md:w-auto"
           >
             Previous
           </button>
+        ) : (
+          <div></div>
         )}
         <button
           type="submit"
           disabled={!isProfileComplete()}
-          className={`px-6 py-3 rounded-md font-medium ml-auto ${
-            isProfileComplete()
-              ? 'bg-green-600 text-white hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500'
-              : 'bg-gray-300 text-gray-500 cursor-not-allowed'
-          } transition-colors`}
+          className={`btn-primary w-full md:w-auto ${
+            !isProfileComplete() ? 'opacity-50 cursor-not-allowed' : ''
+          }`}
         >
           Save & Create Profile Card
         </button>

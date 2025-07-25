@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { StepProps } from '../../types'
 import { X } from 'lucide-react'
+import StepIndicator from '../StepIndicator'
 
 export default function SkillsSpecialties({ 
   formData, 
@@ -8,7 +9,9 @@ export default function SkillsSpecialties({
   onNext, 
   onPrev, 
   isFirst,
-  isLast 
+  isLast,
+  steps,
+  currentStep
 }: StepProps) {
   const [skillInput, setSkillInput] = useState('')
   const [specialtyInput, setSpecialtyInput] = useState('')
@@ -94,6 +97,17 @@ export default function SkillsSpecialties({
 
   return (
     <form onSubmit={handleSubmit}>
+      {/* Step Indicator */}
+      {steps && currentStep && (
+        <div className="stepper-container mb-6">
+          <StepIndicator 
+            steps={steps} 
+            currentStep={currentStep} 
+          />
+          <p className="step-indicator-text">Step {currentStep} of {steps.length}</p>
+        </div>
+      )}
+
       {/* Skills */}
       <div className="form-group">
         <label htmlFor="skills" className="form-label">
