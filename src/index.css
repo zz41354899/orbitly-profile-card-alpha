@@ -1,0 +1,397 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  * {
+    box-sizing: border-box;
+  }
+  
+  body {
+    @apply bg-gray-100 text-gray-900 dark:bg-gray-900 dark:text-gray-100;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+      'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+      sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    transition: background-color 0.3s ease, color 0.3s ease;
+  }
+
+  :root {
+    --background: 0 0% 100%;
+    --foreground: 0 0% 3.9%;
+    --card: 0 0% 100%;
+    --card-foreground: 0 0% 3.9%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 0 0% 3.9%;
+    --primary: 0 0% 9%;
+    --primary-foreground: 0 0% 98%;
+    --secondary: 0 0% 96.1%;
+    --secondary-foreground: 0 0% 9%;
+    --muted: 0 0% 96.1%;
+    --muted-foreground: 0 0% 45.1%;
+    --accent: 0 0% 96.1%;
+    --accent-foreground: 0 0% 9%;
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 0 0% 89.8%;
+    --input: 0 0% 89.8%;
+    --ring: 0 0% 3.9%;
+    --chart-1: 12 76% 61%;
+    --chart-2: 173 58% 39%;
+    --chart-3: 197 37% 24%;
+    --chart-4: 43 74% 66%;
+    --chart-5: 27 87% 67%;
+    --radius: 0.5rem;
+  }
+
+  .dark {
+    --background: 0 0% 3.9%;
+    --foreground: 0 0% 98%;
+    --card: 0 0% 3.9%;
+    --card-foreground: 0 0% 98%;
+    --popover: 0 0% 3.9%;
+    --popover-foreground: 0 0% 98%;
+    --primary: 0 0% 98%;
+    --primary-foreground: 0 0% 9%;
+    --secondary: 0 0% 14.9%;
+    --secondary-foreground: 0 0% 98%;
+    --muted: 0 0% 14.9%;
+    --muted-foreground: 0 0% 63.9%;
+    --accent: 0 0% 14.9%;
+    --accent-foreground: 0 0% 98%;
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 0 0% 14.9%;
+    --input: 0 0% 14.9%;
+    --ring: 0 0% 83.1%;
+    --chart-1: 220 70% 50%;
+    --chart-2: 160 60% 45%;
+    --chart-3: 30 80% 55%;
+    --chart-4: 280 65% 60%;
+    --chart-5: 340 75% 55%;
+  }
+}
+
+@layer components {
+  /* Orbitly Design System - Based on Figma */
+  .orbitly-container {
+    @apply min-h-screen bg-gray-100 dark:bg-gray-900 py-8 px-4 transition-colors;
+  }
+  
+  .orbitly-content {
+    @apply max-w-7xl mx-auto;
+  }
+  
+  .orbitly-header {
+    @apply flex items-center justify-between mb-8 px-4;
+  }
+  
+  .header-left {
+    @apply flex-shrink-0;
+  }
+  
+  .header-center {
+    @apply flex-1 flex justify-center;
+  }
+  
+  .header-right {
+    @apply flex-shrink-0;
+  }
+  
+  .orbitly-title {
+    @apply text-2xl font-bold text-gray-900 dark:text-gray-100 mb-0;
+    letter-spacing: -0.01em;
+  }
+  
+  .stepper-container {
+    @apply flex items-center gap-4;
+  }
+  
+  /* Step Indicator - Exact Figma Design */
+  .step-indicator {
+    @apply flex items-center justify-center;
+  }
+  
+  .step-group {
+    @apply flex items-center;
+  }
+  
+  .step-circle {
+    @apply w-8 h-8 rounded-full flex items-center justify-center text-sm font-medium transition-colors;
+  }
+  
+  .step-circle.active {
+    @apply bg-black text-white;
+  }
+  
+  .step-circle.inactive {
+    @apply bg-gray-300 text-gray-600;
+  }
+  
+  .step-connector {
+    @apply h-px bg-gray-300 w-8 mx-2;
+  }
+  
+  .step-indicator-text {
+    @apply text-sm text-gray-600 dark:text-gray-400 whitespace-nowrap;
+  }
+  
+  /* Dark Mode Toggle */
+  .dark-mode-toggle {
+    @apply w-10 h-10 rounded-full bg-gray-100 hover:bg-gray-200 dark:bg-gray-800 dark:hover:bg-gray-700 
+           flex items-center justify-center transition-colors focus:outline-none focus:ring-2 
+           focus:ring-offset-2 focus:ring-gray-500 dark:focus:ring-gray-400;
+  }
+  
+  .dark-mode-toggle svg {
+    @apply text-gray-600 dark:text-gray-300 transition-colors;
+  }
+  
+  /* Main Layout */
+  .orbitly-main {
+    @apply grid grid-cols-1 md:grid-cols-2 gap-8;
+  }
+  
+  /* Form Panel - Exact Figma Design */
+  .form-panel {
+    @apply bg-white dark:bg-gray-800 rounded-xl shadow-sm p-8 transition-colors;
+    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
+  }
+  
+  .form-title {
+    @apply text-xl font-semibold text-gray-900 dark:text-gray-100 mb-2;
+  }
+  
+  .form-subtitle {
+    @apply text-gray-600 dark:text-gray-400 mb-8;
+  }
+  
+  .form-group {
+    @apply mb-6;
+  }
+  
+  .form-label {
+    @apply block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2;
+  }
+  
+  .form-input {
+    @apply w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg shadow-sm placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-gray-900 dark:focus:ring-gray-100 focus:border-transparent transition-all bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100;
+  }
+  
+  .form-select {
+    @apply w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-gray-900 dark:focus:ring-gray-100 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 transition-all;
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='m6 8 4 4 4-4'/%3e%3c/svg%3e");
+    background-position: right 0.5rem center;
+    background-repeat: no-repeat;
+    background-size: 1.5em 1.5em;
+    padding-right: 2.5rem;
+    appearance: none;
+  }
+  
+  .form-textarea {
+    @apply w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg shadow-sm placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-gray-900 dark:focus:ring-gray-100 focus:border-transparent resize-none transition-all bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100;
+  }
+  
+  /* Toggle Switch - Figma Design */
+  .toggle-container {
+    @apply flex items-start space-x-3;
+  }
+  
+  .toggle-switch {
+    @apply relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-gray-900 focus:ring-offset-2;
+  }
+  
+  .toggle-switch.enabled {
+    @apply bg-gray-600;
+  }
+  
+  .toggle-switch.disabled {
+    @apply bg-gray-200;
+  }
+  
+  .toggle-handle {
+    @apply pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out;
+  }
+  
+  .toggle-handle.enabled {
+    @apply translate-x-5;
+  }
+  
+  .toggle-handle.disabled {
+    @apply translate-x-0;
+  }
+  
+  .toggle-label {
+    @apply text-sm font-medium text-gray-900 dark:text-gray-100;
+  }
+  
+  .toggle-description {
+    @apply text-sm text-gray-500 dark:text-gray-400;
+  }
+  
+  /* Buttons - Exact Figma Design */
+  .btn-primary {
+    @apply bg-black text-white px-8 py-3 rounded-lg hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-900 transition-colors font-medium;
+  }
+  
+  .btn-secondary {
+    @apply bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-300 px-8 py-3 rounded-lg border border-gray-300 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 dark:focus:ring-gray-400 transition-colors font-medium;
+  }
+  
+  .form-navigation {
+    @apply flex justify-between items-center pt-8;
+  }
+  
+  /* Preview Panel - Exact Figma Design */
+  .preview-panel {
+    @apply bg-white dark:bg-gray-800 rounded-xl shadow-sm p-8 transition-colors;
+    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
+  }
+  
+  .preview-title {
+    @apply text-lg font-semibold text-gray-900 dark:text-gray-100 mb-6;
+  }
+  
+  .profile-card {
+    @apply max-w-sm mx-auto;
+  }
+  
+  .profile-avatar {
+    @apply w-20 h-20 bg-gray-200 dark:bg-gray-700 rounded-full flex items-center justify-center mb-4 mx-auto;
+  }
+  
+  .profile-name {
+    @apply text-lg font-semibold text-gray-900 dark:text-gray-100 text-center;
+  }
+  
+  .profile-title {
+    @apply text-gray-600 dark:text-gray-400 text-center mb-4;
+  }
+  
+  .profile-location {
+    @apply flex items-center justify-center text-gray-600 dark:text-gray-400 text-sm mb-6;
+  }
+  
+  .profile-section {
+    @apply mb-6 last:mb-0;
+  }
+  
+  .profile-section-title {
+    @apply font-medium text-gray-900 dark:text-gray-100 mb-2;
+  }
+  
+  .profile-section-content {
+    @apply text-sm text-gray-600 dark:text-gray-400;
+  }
+  
+  /* Skills and Tags */
+  .skill-tag {
+    @apply inline-flex items-center px-3 py-1 rounded-full text-sm bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 mr-2 mb-2;
+  }
+  
+  .preset-tag {
+    @apply inline-flex items-center px-2 py-1 rounded-full text-xs bg-gray-100 text-gray-700 hover:bg-blue-100 hover:text-blue-800 transition-colors cursor-pointer;
+  }
+  
+  /* Footer - Exact Figma Design */
+  .orbitly-footer {
+    @apply text-center mt-12 text-sm text-gray-500;
+  }
+  
+  .footer-content {
+    @apply flex justify-between items-center;
+  }
+  
+  .footer-copyright {
+    @apply text-left;
+  }
+  
+  .footer-links {
+    @apply text-right;
+  }
+  
+  .footer-link {
+    @apply hover:text-gray-700 dark:hover:text-gray-300 transition-colors;
+  }
+  
+  /* Tablet Responsive */
+  @media (max-width: 1024px) {
+    .orbitly-header {
+      @apply flex-col gap-4 text-center;
+    }
+    
+    .header-left, .header-center, .header-right {
+      @apply justify-center;
+    }
+    
+    .stepper-container {
+      @apply gap-3;
+    }
+    
+    .step-connector {
+      @apply w-6 mx-1;
+    }
+  }
+
+  /* Mobile Responsive */
+  @media (max-width: 768px) {
+    .orbitly-main {
+      @apply grid-cols-1;
+    }
+    
+    .orbitly-header {
+      @apply px-2 mb-6;
+    }
+    
+    .orbitly-title {
+      @apply text-xl;
+    }
+    
+    .stepper-container {
+      @apply gap-2;
+    }
+    
+    .step-connector {
+      @apply w-4 mx-1;
+    }
+    
+    .form-panel, .preview-panel {
+      @apply p-6;
+    }
+    
+    .footer-content {
+      @apply flex-col space-y-2;
+    }
+    
+    .footer-copyright, .footer-links {
+      @apply text-center;
+    }
+  }
+  
+  @media (max-width: 640px) {
+    .orbitly-container {
+      @apply py-4 px-2;
+    }
+    
+    .form-panel, .preview-panel {
+      @apply p-4;
+    }
+    
+    .orbitly-title {
+      @apply text-lg;
+    }
+    
+    .step-circle {
+      @apply w-6 h-6 text-xs;
+    }
+    
+    .dark-mode-toggle {
+      @apply w-8 h-8;
+    }
+    
+    .dark-mode-toggle svg {
+      @apply w-4 h-4;
+    }
+  }
+} 
