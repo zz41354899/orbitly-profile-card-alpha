@@ -171,11 +171,6 @@ A: 檢查瀏覽器控制台錯誤，確保所有依賴正確安裝。
 
 本項目使用 MIT 許可證 - 查看 [LICENSE](LICENSE) 文件了解詳情。
 
-## 👥 作者
-
-- 開發者：[Your Name]
-- 項目連結：[Project Link]
-
 ## 🙏 致謝
 
 - [Tailwind CSS](https://tailwindcss.com/) - 優秀的CSS框架
